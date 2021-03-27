@@ -1,0 +1,46 @@
+<div style="padding: 50px;">
+<form #form="ngForm" autocomplete="off" *ngIf="service.formData" (submit)="onSubmit(form)"> 
+    <input type="hidden"  name="ItemId" #ItemId="ngModel" [(ngModel)]="service.formData.ItemId">
+<div class="row">
+    
+<div class="col-md-6">
+        <div class="form-group">
+            <label >Enter VAT</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">$</div>
+                </div>
+            <input name="VAT" #VAT="ngModel" [(ngModel)]="service.formData.VAT" class="form-control" [class.is-invalid]="(!isValid) || (!isValid  && service.formData.VAT.length==0)">
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label >Enter name</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+        <input name="Name" #Name="ngModel" [(ngModel)]="service.formData.Name" class="form-control" [class.is-invalid]="!isValid && service.formData.Name.length==0">
+    </div>
+</div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label >Enter unit measure</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+        <input name="UnitMeasure" #UnitMeasure="ngModel" [(ngModel)]="service.formData.UnitMeasure" class="form-control" [class.is-invalid]="!isValid && service.formData.UnitMeasure.length==0">
+    </div>
+</div>
+</div>
+</div>
+
+<div class="form-group">
+   <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Save </button>
+   <a  class="btn btn-outline-dark ml-1" routerLink="/items"><i class="fa fa-table"></i> Back to items list</a>
+</div>
+</form>
+</div>

@@ -1,0 +1,34 @@
+<div style="padding: 50px;">
+<div class="form-group" style="width: 300px">
+  
+    <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text"><i class="fa fa-search"></i></div>
+        </div>
+     <input type="text" class="form-control" placeholder="Enter search term ..." [(ngModel)]="term">
+     
+</div>
+</div>
+
+<table class="table table-hover">
+    <thead class="thead-light">
+        <th>Name</th>
+        <th>VAT ($)</th>
+        <th>Unit measure</th>
+        <th>
+            <a class="btn btn-outline-success" routerLink="/item"><i class="fa fa-plus-square"></i> New item</a>
+
+        </th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of itemsList | filter:term" title="Click to edit item">
+            <th (click)="openForEdit(item.ItemId)">{{item.Name}}</th>
+            <th (click)="openForEdit(item.ItemId)">{{item.VAT}}</th>
+            <th (click)="openForEdit(item.ItemId)">{{item.UnitMeasure}}</th>
+            <td>
+                <a class="btn text-danger" (click)="onItemDelete(item.ItemId)"><i class="fa fa-trash fa-lg"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
