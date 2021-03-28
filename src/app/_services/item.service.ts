@@ -4,6 +4,7 @@ import { Item } from "src/app/_models/item.model";
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,10 +12,11 @@ export class ItemService {
 
   formData:Item;
 
-  constructor(public mock:MocksService, private http: HttpClient) { }
+  constructor(public mock:MocksService, private http: HttpClient) { 
+  }
 
   getItemById(id:number):any{
-    return this.mock.itemsList.find(i=>i.ItemId == id);
+    return this.http.get<Item>(`${environment.apiUrl}/items/${id}`);
   }
 
 getItemsList()

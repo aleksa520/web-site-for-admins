@@ -30,6 +30,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return addItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
                     return getUserById();
+                case url.match(/\/items\/\d+$/) && method === 'GET':
+                    return getItemById();
                 case url.match(/\/items\/\d+$/) && method === 'DELETE':
                     return deleteItem();
                 default:
@@ -90,6 +92,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             const admin = admins.find(x => x.id === idFromUrl());
             return ok(basicAdminDetails(admin));
+        }
+
+        function getItemById() {
+            const item = items.find(x => x.ItemId === idFromUrl());
+            return ok(basicAdminDetails(item));
         }
 
         function ok(body?) {

@@ -14,7 +14,7 @@ import {OrderService} from 'src/app/_services/customerorder.service';
 })
 export class OrderItemsComponent implements OnInit {
 formData: OrderItem;
-itemList: Item[];
+itemList;
 isValid: boolean = true;
 constructor(
   @Inject(MAT_DIALOG_DATA) public data,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 import {ItemService} from "src/app/_services/item.service";
 
@@ -14,8 +13,7 @@ export class ItemsComponent implements OnInit {
   itemsList = null;
   term: string;
     constructor(public itemService:ItemService,
-      private router: Router,
-      private toastr: ToastrService) { }
+      private router: Router) { }
   
     ngOnInit(): void {
       this.itemService.getItemsList()
@@ -25,10 +23,6 @@ export class ItemsComponent implements OnInit {
   
     openForEdit(itemId: number){
       this.router.navigate(['/item/' + itemId]);
-    }
-  
-    refreshList() {
-      this.itemsList = this.itemService.getItemsList();
     }
   
     onItemDelete(id: number) {
