@@ -14,10 +14,10 @@
     <tbody>
         <tr *ngFor="let order of ordersList | filter:term">
          
-            <th>{{order.DateCreated | date:'yyyy-MM-dd'}}</th>
-            <th>{{order.DateUpdated | date:'yyyy-MM-dd'}} </th>
-            <th>{{order.GTotal}}</th>
-            <th>{{order.Status}}</th>
+            <th (click)="openForEdit(order.OrderId)">{{order.DateCreated | date:'yyyy-MM-dd'}}</th>
+            <th (click)="openForEdit(order.OrderId)">{{order.DateUpdated | date:'yyyy-MM-dd'}} </th>
+            <th (click)="openForEdit(order.OrderId)">{{order.GTotal}}</th>
+            <th (click)="openForEdit(order.OrderId)">{{order.Status}}</th>
             <td>
                 <a class="btn text-danger" (click)="onOrderDelete(order.OrderId)"><i class="fa fa-trash fa-lg"></i></a>
             </td>

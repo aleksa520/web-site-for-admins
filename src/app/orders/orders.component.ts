@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '@app/_services/customerorder.service';
 import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 export class OrdersComponent implements OnInit {
 
 
-  ordersList;
+  ordersList = null;
   term: string;
     constructor(public orderService:OrderService,
       private router: Router,
@@ -22,9 +23,13 @@ export class OrdersComponent implements OnInit {
       this.refreshList();
     }
   
-   
+    openForEdit(orderId: string){
+      this.router.navigate(['/customerorder/' + orderId]);
+    }
     refreshList() {
-     this.ordersList = this.orderService.getOrdersList();
+      this.orderService.getOrdersList()
+      .pipe(first())
+      .subscribe(i => this.ordersList = i);
     }
   
     onOrderDelete(id: number) {

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { MocksService } from './mocks.service';
 import { Order } from "src/app/_models/customerorder.model";
 import { OrderItem } from "src/app/_models/order-item.model";
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,14 +33,17 @@ export class OrderService {
       this.orderItems[i].OrderItemId = i + 1;
       this.orderItems[i].OrderId = order.OrderId;
     }
-    this.mock.saveOrder(order as unknown as Order);
-    this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
+  //  this.mock.saveOrder(order as unknown as Order);
+   // this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
+   return this.http.post(`${environment.apiUrl}/order`, order);
   }
 
-
+ getOrderById(id:string){
+  return this.http.get<Order>(`${environment.apiUrl}/orders/${id}`);
+ }
 
   getOrdersList() {
-    return this.mock.ordersList;
+    return this.http.get<Order>(`${environment.apiUrl}/orders`);
   }
 
   delete(id: number) {

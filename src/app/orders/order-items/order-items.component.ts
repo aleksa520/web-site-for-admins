@@ -6,6 +6,8 @@ import {ItemService} from "src/app/_services/item.service";
 import {Item} from 'src/app/_models/item.model';
 import { NgForm } from '@angular/forms';
 import {OrderService} from 'src/app/_services/customerorder.service';
+import { FakeBackendInterceptor } from '@app/_helpers';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-items',
@@ -14,7 +16,7 @@ import {OrderService} from 'src/app/_services/customerorder.service';
 })
 export class OrderItemsComponent implements OnInit {
 formData: OrderItem;
-itemList;
+itemList = null;
 isValid: boolean = true;
 constructor(
   @Inject(MAT_DIALOG_DATA) public data,
@@ -25,7 +27,11 @@ constructor(
 
   ngOnInit(): void {
 
-this.itemList = this.ItemService.getItemsList();
+
+this.ItemService.getItemsList()
+.pipe(first())
+.subscribe(items => this.itemList = items);
+
 if (this.data.orderItemIndex == null)
     this.formData = {
       OrderItemId: null,

@@ -5,6 +5,7 @@ import { MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { OrderService } from '@app/_services/customerorder.service';
 import { OrderItemsComponent } from '../order-items/order-items.component';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -24,9 +25,23 @@ export class OrderComponent implements OnInit {
     private currentRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    
+    let orderId = this.currentRoute.snapshot.paramMap.get('id');
+    if(orderId == null)
     this.resetForm();
-
+    else { 
+      this.service.getOrderById(orderId)
+      .pipe(first())
+      .subscribe(order => this.service.formData = order);
+      //.then(res => {
+     // this.service.formData = res.ponuda;
+     // this.service.formData.Datum = res.ponuda.Datum;
+      //this.service.stavkePonude = res.ponudaDetails;
+  // });
+ 
   }
+}
+
 
   resetForm(form?:NgForm){
     if(form=null)

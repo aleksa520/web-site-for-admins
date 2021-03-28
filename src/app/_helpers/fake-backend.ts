@@ -2,12 +2,19 @@
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
+import { Order } from '@app/_models/customerorder.model';
 
 const adminsKey = 'admins';
 let admins = JSON.parse(localStorage.getItem(adminsKey)) || [];
 
 const itemsKey = 'items';
 let items = JSON.parse(localStorage.getItem(itemsKey)) || [];
+
+const ordersKey = 'orders';
+let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
+
+const orderItemsKey = 'orderItems';
+let orderItems = JSON.parse(localStorage.getItem(orderItemsKey)) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -28,12 +35,22 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getItems();
                 case url.endsWith('/item') && method === 'POST':
                     return addItem();
+                    case url.endsWith('/orderitems') && method === 'GET':
+                        return getOrderItems();
+                    case url.endsWith('/orderitem') && method === 'POST':
+                        return addOrderItem();
+                    case url.endsWith('/orders') && method === 'GET':
+                        return getOrders();
+                    case url.endsWith('/order') && method === 'POST':
+                        return addOrder();
                 case url.match(/\/item\/\d+$/) && method === 'PUT':
                     return updateItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
                     return getUserById();
                 case url.match(/\/items\/\d+$/) && method === 'GET':
                     return getItemById();
+                    case url.match(/\/orders\/\d+$/) && method === 'GET':
+                    return getOrderById();
                 case url.match(/\/items\/\d+$/) && method === 'DELETE':
                     return deleteItem();
                 default:
@@ -64,6 +81,15 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
 
+        function addOrder() {
+            const order = body
+
+            order.OrderId = orders.length ? Math.max(...orders.map(x => x.OrderId)) + 1 : 1;
+            orders.push(order);
+            localStorage.setItem(ordersKey, JSON.stringify(orders));
+            return ok();
+        }
+
         function addItem() {
             const item = body
 
@@ -72,7 +98,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             localStorage.setItem(itemsKey, JSON.stringify(items));
             return ok();
         }
+        function addOrderItem() {
+            const item = body
 
+            item.OrderItemId = orderItems.length ? Math.max(...items.map(x => x.ItemId)) + 1 : 1;
+            orderItems.push(item);
+            localStorage.setItem(orderItemsKey, JSON.stringify(orderItems));
+            return ok();
+        }
         function deleteItem() {
             items = items.filter(x => x.ItemId !== idFromUrl());
             localStorage.setItem(itemsKey, JSON.stringify(items));
@@ -99,6 +132,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok(items.map(x => basicItemDetails(x)));
         }
 
+        function getOrders() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(orders.map(x => basicOrderDetails(x)));
+        }
+
+        function getOrderItems() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(orderItems.map(x => basicOrderItemDetails(x)));
+        }
+        
+
         function getUserById() {
             if (!isLoggedIn()) return unauthorized();
 
@@ -109,6 +153,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function getItemById() {
             const item = items.find(x => x.ItemId === idFromUrl());
             return ok(basicItemDetails(item));
+        }
+
+        function getOrderById() {
+            const order = orders.find(x => x.OrderId === idFromUrl());
+            return ok(basicOrderDetails(order));
         }
 
         function ok(body?) {
@@ -131,11 +180,23 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return { id, username, firstName, lastName };
         }
 
+        function basicOrderDetails(order) {
+            const {OrderId,DateCreated,DateUpdated,GTotal,Status,DeletedItemsIDs} = order;
+            return { OrderId,DateCreated,DateUpdated,GTotal,Status,DeletedItemsIDs};
+            
+        }
+
         function basicItemDetails(item) {
             const { ItemId, Name, VAT, UnitMeasure, Price } = item;
             return { ItemId, Name, VAT, UnitMeasure, Price };
             
         }
+
+        function basicOrderItemDetails(orderItem) {
+            const {OrderItemId, OrderId, ItemId, Quantity, Price, Total } = orderItem;
+            return {OrderItemId, OrderId, ItemId, Quantity, Price, Total  }; 
+        }
+        
 
         function isLoggedIn() {
             return headers.get('Authorization') === 'Bearer fake-jwt-token';
@@ -153,3 +214,9 @@ export const fakeBackendProvider = {
     useClass: FakeBackendInterceptor,
     multi: true
 };
+
+
+
+
+
+
