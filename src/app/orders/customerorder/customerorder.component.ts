@@ -15,9 +15,6 @@ import { OrderItemsComponent } from '../order-items/order-items.component';
 
 
 export class OrderComponent implements OnInit {
-
- 
- 
   isValid: boolean = true;
 
   constructor(public service:OrderService,

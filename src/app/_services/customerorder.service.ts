@@ -15,39 +15,36 @@ export class OrderService {
   RemoveItems: string[];
 
   constructor(public http: HttpClient,
-    public mock:MocksService) {}
+    public mock: MocksService) { }
 
- saveOrder() {
+  saveOrder() {
 
-  var order = {
-    OrderId: this.mock.ordersList.slice(-1)[0].OrderId+1,
-    DateCreated: this.formData.DateCreated,
-    DateUpdated: this.formData.DateUpdated,
-    GTotal: this.formData.GTotal,
-    Status: this.formData.Status,
-    OrderItems: this.orderItems,
-    DeletedOrderItemIDs: this.DeletedOrderItemIds
-  };
-  for(let i = 0; i < this.orderItems.length; i++)
-  {
-    this.orderItems[i].OrderItemId = i+1;
-    this.orderItems[i].OrderId = order.OrderId;
+    var order = {
+      OrderId: this.mock.ordersList.slice(-1)[0].OrderId + 1,
+      DateCreated: this.formData.DateCreated,
+      DateUpdated: this.formData.DateUpdated,
+      GTotal: this.formData.GTotal,
+      Status: this.formData.Status,
+      OrderItems: this.orderItems,
+      DeletedOrderItemIDs: this.DeletedOrderItemIds
+    };
+    for (let i = 0; i < this.orderItems.length; i++) {
+      this.orderItems[i].OrderItemId = i + 1;
+      this.orderItems[i].OrderId = order.OrderId;
+    }
+    this.mock.saveOrder(order as unknown as Order);
+    this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
   }
-   this.mock.saveOrder(order as unknown as Order);
-   this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
+
+
+
+  getOrdersList() {
+    return this.mock.ordersList;
   }
 
-
-
-  getOrdersList()
-{
-   return this.mock.ordersList;
-}
-
-delete(id : number)
-{
-  this.mock.removeOrder(id);
-}
+  delete(id: number) {
+    this.mock.removeOrder(id);
+  }
 
 }
 
