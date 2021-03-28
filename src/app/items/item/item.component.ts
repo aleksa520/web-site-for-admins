@@ -47,7 +47,8 @@ resetForm(form?:NgForm){
     ItemId: null,
     Name: "",
     VAT: 0,
-    UnitMeasure: ""
+    UnitMeasure: "",
+    Price:0
   }
 }
 
@@ -94,7 +95,7 @@ validateForm() {
     this.isValid = false;
   
     if(this.service.formData.VAT == 0 || this.service.formData.Name==""
-    || this.service.formData.UnitMeasure=="") this.isValid=false;
+    || this.service.formData.UnitMeasure=="" || this.service.formData.Price==0) this.isValid=false;
   return this.isValid;
 }
 

@@ -34,7 +34,8 @@ save() {
   var newItem = {
     VAT:  parseFloat(this.formData.VAT.toString()),
     Name: this.formData.Name,
-    UnitMeasure: this.formData.UnitMeasure
+    UnitMeasure: this.formData.UnitMeasure,
+    Price: this.formData.Price
   }
 
   return this.http.post(`${environment.apiUrl}/item`, newItem);

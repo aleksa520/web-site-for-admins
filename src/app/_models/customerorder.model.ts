@@ -3,4 +3,16 @@ export class Order {
     DateCreated: Date;
     DateUpdated?: Date;
     GTotal: number;
+    Status: OrderStatus;
+    DeletedItemsIDs: string;
+}
+
+enum OrderStatus
+{
+  CREATED,
+  PROCESSING,
+  CONFIRMED,
+  UPDATED,
+  SHIPPED,
+  CLOSED
 }

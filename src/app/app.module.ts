@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule} from '@angular/forms';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderComponent } from './orders/customerorder/customerorder.component';
+import { OrderItemsComponent } from './orders/order-items/order-items.component';
 import { OrderService } from './_services/customerorder.service';
 import { MatDialogModule} from '@angular/material/dialog';
 import { ToastrModule } from 'ngx-toastr';
@@ -39,7 +40,8 @@ import { RouterModule } from '@angular/router';
         OrdersComponent,
         OrderComponent,
         ItemsComponent,
-        ItemComponent
+        ItemComponent,
+        OrderItemsComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -48,6 +50,7 @@ import { RouterModule } from '@angular/router';
         [OrderService]
     ],
     bootstrap: [AppComponent],
+    entryComponents: [OrderItemsComponent],
     exports: [RouterModule]
 })
 export class AppModule { };

@@ -1,26 +1,36 @@
-<div style="padding: 50px;">   
+    <div style="padding: 50px">
 <form #form="ngForm" autocomplete="off" *ngIf="service.formData" (submit) = "onSubmit(form)">
   <input type="hidden"  name="OrderId" #OrderId="ngModel" [(ngModel)]="service.formData.OrderId">
   <div class="row">
-<div class="col-md-6">
-    <div class="form-group">
-        <label>Customer</label>
-        <select name="CustomerId" #CustomerID="ngModel" [(ngModel)]="service.formData.CustomerId" class="form-control"  [class.is-invalid]="!isValid && service.formData.CustomerId==0">
-  <option value="0">-Select-</option>
-  <option *ngFor="let item of customerList" value="{{item.CustomerId}}">{{item.Name}}</option>
-        </select>
-     </div>
+
+    <div class="col-5">
+      <label>Date created</label>
+      <div class="form-group"> 
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">#</div>
+          </div>
+          <div class="form-control">
+            <th>{{service.formData.DateCreated | date:'yyyy-MM-dd'}}</th>
+          </div>
+        </div>
+      </div>
+   </div>
+
+   
+   <div class="col-5">
+    <label>Date updated</label>
+    <div class="form-group"> 
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">#</div>
+        </div>
+        <input name="DateUpdated" #DateUpdated="ngModel" [(ngModel)]="service.formData.DateUpdated" class="form-control" readonly>
+      </div>
+    </div>
  </div>
 
-    <div class="col-md-6">
-    <div class="form-group">
-        <label>Payment Method</label>
-        <select name="PMethod" #PMethod="ngModel" [(ngModel)]="service.formData.PMethod" class="form-control">
-  <option value="">-Select-</option>
-  <option value="Cash">Cash</option>
-  <option value="Card">Card</option>
-        </select>
-     </div>
+    <div class="col-5">
      <div class="form-group">
         <label>Grand Total</label>
 
@@ -32,11 +42,24 @@
         </div>
       </div>
     </div>
+
+    <div class="col-5">
+      <div class="form-group">
+         <label>Status</label>
+ 
+         <div class="input-group">
+           <div class="input-group-prepend">
+             <div class="input-group-text">#</div>
+           </div>
+           <input name="Status" #Status="ngModel" [(ngModel)]="service.formData.Status" class="form-control">
+         </div>
+       </div>
+     </div>
   </div>
  <!--order items table-->
  <table class="table table-borderless">
    <thead class="thead light">
-     <th>Food</th>
+     <th>Item</th>
      <th>Price</th>
      <th>Quantity</th>
      <th>Total</th>
@@ -50,11 +73,11 @@
     <tr *ngIf="service.orderItems.length==0" [class.text-danger]="!isValid && service.orderItems.length==0">
      
 <td class="font-italic text-center" colspan="5">
-  No food selected for this order.
+  No item selected for this order.
 </td>
      </tr>
 <tr *ngFor="let item of service.orderItems, let i = index">
-<td>{{item.ItemName}}</td>
+<td>{{item.ItemId}}</td>
 <td>{{item.Price}}</td>
 <td>{{item.Quantity}}</td>
 <td>{{item.Total}}</td>

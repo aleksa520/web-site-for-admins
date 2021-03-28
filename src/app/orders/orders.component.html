@@ -5,6 +5,7 @@
         <th>Created</th>
         <th>Updated</th>
         <th>Total $</th>
+        <th>Status</th>
         <th>
             <a class="btn btn-outline-success" routerLink="/customerorder"><i class="fa fa-plus-square"></i> New order</a>
 
@@ -16,6 +17,7 @@
             <th>{{order.DateCreated | date:'yyyy-MM-dd'}}</th>
             <th>{{order.DateUpdated | date:'yyyy-MM-dd'}} </th>
             <th>{{order.GTotal}}</th>
+            <th>{{order.Status}}</th>
             <td>
                 <a class="btn text-danger" (click)="onOrderDelete(order.OrderId)"><i class="fa fa-trash fa-lg"></i></a>
             </td>

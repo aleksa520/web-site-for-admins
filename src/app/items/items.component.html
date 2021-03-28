@@ -15,6 +15,7 @@
         <th>Name</th>
         <th>VAT ($)</th>
         <th>Unit measure</th>
+        <th>Price</th>
         <th>
             <a class="btn btn-outline-success" routerLink="/item"><i class="fa fa-plus-square"></i> New item</a>
         </th>
@@ -24,6 +25,7 @@
             <th (click)="openForEdit(item.ItemId)">{{item.Name}}</th>
             <th (click)="openForEdit(item.ItemId)">{{item.VAT}}</th>
             <th (click)="openForEdit(item.ItemId)">{{item.UnitMeasure}}</th>
+            <th (click)="openForEdit(item.ItemId)">{{item.Price}}</th>
             <td>
                 <a class="btn text-danger" (click)="onItemDelete(item.ItemId)"><i class="fa fa-trash fa-lg"></i></a>
             </td>
