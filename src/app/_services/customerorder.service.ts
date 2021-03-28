@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { MocksService } from './mocks.service';
 import { Order } from "src/app/_models/customerorder.model";
 import { OrderItem } from "src/app/_models/order-item.model";
-import { OrderItemPOST } from "src/app/_models/order-itemPOST.model";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +11,6 @@ export class OrderService {
 
   formData: Order;
   orderItems: OrderItem[];
-  orderItemsPOST: OrderItemPOST[];
   DeletedOrderItemIds: string;
   RemoveItems: string[];
 
@@ -21,7 +20,7 @@ export class OrderService {
  saveOrder() {
 
   var order = {
-    OrderId:0,
+    OrderId: this.mock.ordersList.slice(-1)[0].OrderId+1,
     DateCreated: this.formData.DateCreated,
     DateUpdated: this.formData.DateUpdated,
     GTotal: this.formData.GTotal,
@@ -29,26 +28,16 @@ export class OrderService {
     OrderItems: this.orderItems,
     DeletedOrderItemIDs: this.DeletedOrderItemIds
   };
-   
+  for(let i = 0; i < this.orderItems.length; i++)
+  {
+    this.orderItems[i].OrderItemId = i+1;
+    this.orderItems[i].OrderId = order.OrderId;
+  }
    this.mock.saveOrder(order as unknown as Order);
-  
+   this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
   }
 
 
-  createOrderItemsList(orderItems: OrderItem[])
-  {  
-   this.DeletedOrderItemIds = this.formData.DeletedItemsIDs;
-   this.RemoveItems = this.formData.DeletedItemsIDs.split(',');
-   for(let i = 0; i < this.orderItems.length; i++){
-    if(!this.RemoveItems.includes(this.orderItems[i].ItemId.toString()))
-    {
-     this.orderItemsPOST.push({ItemId : parseInt(this.orderItems[i].ItemId.toString()),
-       Quantity: parseInt(this.orderItems[i].Quantity.toString())});
-     }
-  }
-
-  return this.orderItemsPOST;
-}
 
   getOrdersList()
 {

@@ -7,6 +7,7 @@ import { Item } from "src/app/_models/item.model";
   providedIn: 'root'
 })
 export class MocksService {
+ 
   
   
 static itemsList: Item[];
@@ -43,6 +44,13 @@ total:number = 0;
 
   saveOrder(order: Order) {
     
+    this.ordersList.push(order);
+  }
+  saveOrderItems(orderItems: OrderItem[]) {
+   for(let i = 0; i < orderItems.length; i++)
+   {
+     
+   }
   }
   
   addItem(item:Item){
