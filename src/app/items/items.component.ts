@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
 import {ItemService} from "src/app/_services/item.service";
 
 @Component({
@@ -10,14 +11,16 @@ import {ItemService} from "src/app/_services/item.service";
 })
 export class ItemsComponent implements OnInit {
 
-  itemsList;
+  itemsList = null;
   term: string;
     constructor(public itemService:ItemService,
       private router: Router,
       private toastr: ToastrService) { }
   
     ngOnInit(): void {
-      this.refreshList();
+      this.itemService.getItemsList()
+            .pipe(first())
+            .subscribe(items => this.itemsList = items);
     }
   
     openForEdit(itemId: number){
@@ -29,11 +32,12 @@ export class ItemsComponent implements OnInit {
     }
   
     onItemDelete(id: number) {
-      if (confirm('Are you sure you want to delete this item?')) {
-        this.itemService.deleteItem(id);
-         this.refreshList();
-          this.toastr.warning("Item deleted successfully!");
+      if (confirm('Are you sure you want to delete this item?')){
+        const item = this.itemsList.find(x => x.ItemId === id);
+        item.isDeleting = true;
+        this.itemService.deleteItem(id)
+            .pipe(first())
+            .subscribe(() => this.itemsList = this.itemsList.filter(x => x.ItemId !== id));
       }
     }
-
 }

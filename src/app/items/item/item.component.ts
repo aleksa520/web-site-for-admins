@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlertService } from '@app/_services';
 import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
 import {ItemService} from "src/app/_services/item.service";
 
 @Component({
@@ -16,8 +18,13 @@ export class ItemComponent implements OnInit {
   isValid: boolean=true;
   itemsList;
   forUpdate: boolean=false;
-  constructor(public dialog: MatDialog,public service: ItemService,
+  submitted = false;
+  loading = false;
+  constructor(public dialog: MatDialog,
+    public service: ItemService,
+    private alertService: AlertService,
     public toastr: ToastrService,
+    private route: ActivatedRoute,
     public router:Router,
     private currentRoute: ActivatedRoute) { }
 
@@ -56,10 +63,27 @@ onSubmit(form: NgForm) {
         this.router.navigate(['items']);
     }else
     {
-      this.service.save();
-      this.resetForm();
-      this.toastr.success("Successfully saved!");
-      this.router.navigate(['items']);
+      this.submitted = true;
+
+        this.alertService.clear();
+        
+        if (form.invalid) {
+            return;
+        }
+
+      this.loading = true;
+        this.service.save()
+            .pipe(first())
+            .subscribe({
+                next: () => {
+                    this.alertService.success('Item is added', { keepAfterRouteChange: true });
+                    this.router.navigate(['../items'], { relativeTo: this.route });
+                },
+                error: error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                }
+            });
     }
   }
 }

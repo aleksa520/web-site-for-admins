@@ -3,8 +3,11 @@ import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTT
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
 
-const adminsKey = 'web-site-for-admins';
+const adminsKey = 'admins';
 let admins = JSON.parse(localStorage.getItem(adminsKey)) || [];
+
+const itemsKey = 'items';
+let items = JSON.parse(localStorage.getItem(itemsKey)) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -21,8 +24,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return register();
                 case url.endsWith('/admins') && method === 'GET':
                     return getUsers();
+                case url.endsWith('/items') && method === 'GET':
+                    return getItems();
+                case url.endsWith('/item') && method === 'POST':
+                    return addItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
                     return getUserById();
+                case url.match(/\/items\/\d+$/) && method === 'DELETE':
+                    return deleteItem();
                 default:
                     return next.handle(request);
             }    
@@ -33,7 +42,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             const admin = admins.find(x => x.username === username && x.password === password);
             if (!admin) return error('Username or password is incorrect');
             return ok({
-                ...basicDetails(admin),
+                ...basicAdminDetails(admin),
                 token: 'fake-jwt-token'
             })
         }
@@ -51,16 +60,36 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
 
+        function addItem() {
+            const item = body
+
+            item.ItemId = items.length ? Math.max(...items.map(x => x.ItemId)) + 1 : 1;
+            items.push(item);
+            localStorage.setItem(itemsKey, JSON.stringify(items));
+            return ok();
+        }
+
+        function deleteItem() {
+            items = items.filter(x => x.ItemId !== idFromUrl());
+            localStorage.setItem(itemsKey, JSON.stringify(items));
+            return ok();
+        }
+
         function getUsers() {
             if (!isLoggedIn()) return unauthorized();
-            return ok(admins.map(x => basicDetails(x)));
+            return ok(admins.map(x => basicAdminDetails(x)));
+        }
+
+        function getItems() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(items.map(x => basicItemDetails(x)));
         }
 
         function getUserById() {
             if (!isLoggedIn()) return unauthorized();
 
             const admin = admins.find(x => x.id === idFromUrl());
-            return ok(basicDetails(admin));
+            return ok(basicAdminDetails(admin));
         }
 
         function ok(body?) {
@@ -78,9 +107,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 .pipe(materialize(), delay(500), dematerialize());
         }
 
-        function basicDetails(admin) {
+        function basicAdminDetails(admin) {
             const { id, username, firstName, lastName } = admin;
             return { id, username, firstName, lastName };
+        }
+
+        function basicItemDetails(item) {
+            const { ItemId, Name, VAT, UnitMeasure } = item;
+            return { ItemId, Name, VAT, UnitMeasure } ;
         }
 
         function isLoggedIn() {
