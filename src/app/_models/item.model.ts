@@ -3,11 +3,5 @@ export class Item {
     Name: string;
     VAT:number;
     UnitMeasure:string;
+    Price:number;
 }
-
-enum UnitMeasure {
-    Up = 1,
-    Down,
-    Left,
-    Right,
-  }
