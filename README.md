@@ -8,9 +8,6 @@ Use
 
 ```
 npm install
-npm install ngx-toastr --save
-ng add @angular/material
-npm i ng2-search-filter --save
 npm start command or ng serve --o
 
 ```
