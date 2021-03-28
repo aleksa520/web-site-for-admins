@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '@app/_services';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
-import {ItemService} from "src/app/_services/item.service";
+import { ItemService } from "src/app/_services/item.service";
 
 @Component({
   selector: 'app-item',
@@ -14,89 +14,103 @@ import {ItemService} from "src/app/_services/item.service";
 })
 export class ItemComponent implements OnInit {
 
- 
-  isValid: boolean=true;
+
+  isValid: boolean = true;
   itemsList;
-  forUpdate: boolean=false;
+  forUpdate: boolean = false;
   submitted = false;
   loading = false;
+  item;
   constructor(public dialog: MatDialog,
     public service: ItemService,
     private alertService: AlertService,
     public toastr: ToastrService,
     private route: ActivatedRoute,
-    public router:Router,
+    public router: Router,
     private currentRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-   
     let ItemId = this.currentRoute.snapshot.paramMap.get('id');
-    if(ItemId == null)
-    this.resetForm();
-    else { 
-      this.service.formData = this.service.getItemById(parseInt(ItemId)); 
+    if (ItemId == null) {
+      this.resetForm();
+    }
+    else {
+      this.service.getItemById((ItemId)).subscribe(val => this.service.formData = val);
       this.forUpdate = true;
+    }
+    this.itemsList = this.service.getItemsList();
   }
-  this.itemsList = this.service.getItemsList();    
-}
 
-resetForm(form?:NgForm){
-  if(form=null)
-  form.resetForm();
-  this.service.formData={
-    ItemId: null,
-    Name: "",
-    VAT: 0,
-    UnitMeasure: "",
-    Price:0
-  }
-}
-
-
-onSubmit(form: NgForm) {
-  if (this.validateForm()) {
-      
-    if(this.forUpdate == true)
-    {
-      this.service.update();
-        this.resetForm();
-        this.toastr.success("Successfully saved!");
-        this.router.navigate(['items']);
-    }else
-    {
-      this.submitted = true;
-
-        this.alertService.clear();
-        
-        if (form.invalid) {
-            return;
-        }
-
-      this.loading = true;
-        this.service.save()
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Item is added', { keepAfterRouteChange: true });
-                    this.router.navigate(['../items'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+  resetForm(form?: NgForm) {
+    if (form = null)
+      form.resetForm();
+    this.service.formData = {
+      ItemId: null,
+      Name: "",
+      VAT: 0,
+      UnitMeasure: "",
+      Price: 0
     }
   }
-}
 
-validateForm() {
-  this.isValid = true;
-  if (this.service.formData.ItemId == 0)
-    this.isValid = false;
-  
-    if(this.service.formData.VAT == 0 || this.service.formData.Name==""
-    || this.service.formData.UnitMeasure=="" || this.service.formData.Price==0) this.isValid=false;
-  return this.isValid;
-}
+  onSubmit(form: NgForm) {
+    if (this.validateForm()) {
+      this.submitted = true;
 
+      this.alertService.clear();
+
+      if (form.invalid) {
+        return;
+      }
+
+      this.loading = true;
+      if (this.forUpdate == true) {
+        this.service.update()
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.alertService.success('Update successful', { keepAfterRouteChange: true });
+              this.toastr.success("Successfully saved!");
+              this.router.navigateByUrl('/items');
+            },
+            error: error => {
+              this.alertService.error(error);
+              this.loading = false;
+            }
+          });
+      } else {
+        this.submitted = true;
+
+        this.alertService.clear();
+
+        if (form.invalid) {
+          return;
+        }
+
+        this.loading = true;
+        this.service.save()
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.alertService.success('Item is added', { keepAfterRouteChange: true });
+              this.router.navigate(['../items'], { relativeTo: this.route });
+            },
+            error: error => {
+              this.alertService.error(error);
+              this.loading = false;
+            }
+          });
+      }
+    }
+  }
+
+  validateForm() {
+    this.isValid = true;
+    if (this.service.formData.ItemId == 0)
+      this.isValid = false;
+
+    if (this.service.formData.VAT == 0 || this.service.formData.Name == ""
+      || this.service.formData.UnitMeasure == "" || this.service.formData.Price == 0) this.isValid = false;
+    return this.isValid;
+  }
 }

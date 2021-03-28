@@ -28,6 +28,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getItems();
                 case url.endsWith('/item') && method === 'POST':
                     return addItem();
+                case url.match(/\/item\/\d+$/) && method === 'PUT':
+                    return updateItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
                     return getUserById();
                 case url.match(/\/items\/\d+$/) && method === 'GET':
@@ -36,7 +38,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return deleteItem();
                 default:
                     return next.handle(request);
-            }    
+            }
         }
 
         function authenticate() {
@@ -77,6 +79,16 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
 
+        function updateItem() {
+            let params = body;
+            let item = items.find(x => x.ItemId === idFromUrl());
+
+            Object.assign(item, params);
+            localStorage.setItem(itemsKey, JSON.stringify(items));
+
+            return ok();
+        }
+
         function getUsers() {
             if (!isLoggedIn()) return unauthorized();
             return ok(admins.map(x => basicAdminDetails(x)));
@@ -96,7 +108,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function getItemById() {
             const item = items.find(x => x.ItemId === idFromUrl());
-            return ok(basicAdminDetails(item));
+            return ok(basicItemDetails(item));
         }
 
         function ok(body?) {
@@ -106,7 +118,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function error(message) {
             return throwError({ error: { message } })
-                .pipe(materialize(), delay(500), dematerialize()); 
+                .pipe(materialize(), delay(500), dematerialize());
         }
 
         function unauthorized() {
@@ -120,8 +132,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function basicItemDetails(item) {
-            const { ItemId, Name, VAT, UnitMeasure } = item;
-            return { ItemId, Name, VAT, UnitMeasure } ;
+            const { ItemId, Name, VAT, UnitMeasure, Price } = item;
+            return { ItemId, Name, VAT, UnitMeasure, Price };
+            
         }
 
         function isLoggedIn() {
