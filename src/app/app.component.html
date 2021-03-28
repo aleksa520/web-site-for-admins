@@ -1,11 +1,9 @@
 ﻿<!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="admin">
     <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a class="nav-item nav-link" (click)="logout()">Logout</a>
+        <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>    
     </div>
-
-  
+    
    <div class="container">
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ml-auto">
@@ -14,6 +12,9 @@
         </li>
         <li class="nav-item">
             <a  class="btn btn-outline-primary" routerLink="/items"><i class="fa fa-tasks"></i> Items</a>
+        </li>
+        <li>
+          <a class="nav-item nav-link" (click)="logout()">Logout</a>
         </li>
       </ul>
     </div>
