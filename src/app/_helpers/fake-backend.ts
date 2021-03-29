@@ -43,6 +43,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getOrders();
                 case url.endsWith('/order') && method === 'POST':
                     return addOrder();
+                case url.endsWith('/order') && method === 'PUT':
+                    return updateOrder();
                 case url.match(/\/item\/\d+$/) && method === 'PUT':
                     return updateItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
@@ -53,6 +55,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getOrderById();
                 case url.match(/\/items\/\d+$/) && method === 'DELETE':
                     return deleteItem();
+                case url.match(/\/orders\/\d+$/) && method === 'DELETE':
+                    return deleteOrder();
                 default:
                     return next.handle(request);
             }
@@ -89,6 +93,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             localStorage.setItem(ordersKey, JSON.stringify(orders));
             return ok();
         }
+        function updateOrder() {
+        
+            let params = body;
+            let order = orders.find(x => x.OrderId == params.OrderId);
+            Object.assign(order, params);
+            localStorage.setItem(ordersKey, JSON.stringify(orders));
+            return ok();
+        }
 
         function addItem() {
             const item = body
@@ -111,7 +123,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             localStorage.setItem(itemsKey, JSON.stringify(items));
             return ok();
         }
-
+        function deleteOrder() {
+            orders = orders.filter(x => x.OrderId !== idFromUrl());
+            localStorage.setItem(ordersKey, JSON.stringify(orders));
+            return ok();
+        }
         function updateItem() {
             let params = body;
             let item = items.find(x => x.ItemId === idFromUrl());

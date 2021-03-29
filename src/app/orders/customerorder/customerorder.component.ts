@@ -20,7 +20,7 @@ export class OrderComponent implements OnInit {
   loading = false;
   orderStatus = OrderStatus;
   enumKeys = []
-
+ 
   constructor(public service:OrderService,
     public dialog: MatDialog,
     public router: Router,
@@ -38,14 +38,12 @@ export class OrderComponent implements OnInit {
     else { 
       this.service.getOrderById(orderId)
       .pipe(first())
-      .subscribe(order => this.service.formData = order);
-      //.then(res => {
-     // this.service.formData = res.ponuda;
-     // this.service.formData.Datum = res.ponuda.Datum;
-      //this.service.stavkePonude = res.ponudaDetails;
-  // });
- 
-  }
+      .subscribe(order => 
+                          { 
+                            this.service.formData = order,
+                            this.service.hasOrderItems = true
+                          });
+   }
 }
   resetForm(form?:NgForm){
     if(form=null)
@@ -73,6 +71,7 @@ export class OrderComponent implements OnInit {
         this.dialog.open(OrderItemsComponent, dialogConfig).afterClosed().subscribe(res=>
           {
             this.updateGrandTotal();
+            this.service.hasOrderItems = true;
           });
   }
 
@@ -81,6 +80,7 @@ export class OrderComponent implements OnInit {
      this.service.formData.DeletedItemsIDs += orderItemID + ",";
      this.service.orderItems.splice(i, 1);
      this.updateGrandTotal();
+     if(this.service.formData.GTotal == 0) this.service.hasOrderItems = false;
   }
 
   updateGrandTotal() {
@@ -114,7 +114,7 @@ export class OrderComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: () => {
-              this.alertService.success('Orded is added', { keepAfterRouteChange: true });
+              this.alertService.success('Order is added', { keepAfterRouteChange: true });
               this.router.navigate(['/orders']);
             },
             error: error => {

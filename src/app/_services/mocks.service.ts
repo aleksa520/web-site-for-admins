@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Order, OrderStatus } from "src/app/_models/customerorder.model";
 import { OrderItem } from "src/app/_models/order-item.model";
-import { Item } from "src/app/_models/item.model";
+import { Item, UnitMeasure } from "src/app/_models/item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +19,9 @@ total:number = 0;
   constructor() { }
 
    itemsList: Item[] = [
-    {ItemId:1,Name:"Coca Cola", UnitMeasure:"l",VAT:0.1,Price:10},
-    {ItemId:2,Name:"Pepsi", UnitMeasure:"l",VAT:0.2, Price:11},
-    {ItemId:3,Name:"Fanta", UnitMeasure:"l",VAT:0.3,Price:12}
+    {ItemId:1,Name:"Coca Cola", UnitMeasure:UnitMeasure.L,VAT:0.1,Price:10},
+    {ItemId:2,Name:"Pepsi", UnitMeasure:UnitMeasure.L,VAT:0.2, Price:11},
+    {ItemId:3,Name:"Fanta", UnitMeasure:UnitMeasure.L,VAT:0.3,Price:12}
 
   ];
 

@@ -14,28 +14,39 @@ export class OrderService {
   orderItems: OrderItem[];
   DeletedOrderItemIds: string;
   RemoveItems: string[];
-
-  constructor(public http: HttpClient,
-    public mock: MocksService) { }
+  hasOrderItems:boolean = false;
+  constructor(public http: HttpClient) { }
 
   saveOrder() {
 
-    var order = {
-      OrderId: this.mock.ordersList.slice(-1)[0].OrderId + 1,
-      DateCreated: this.formData.DateCreated,
-      DateUpdated: this.formData.DateUpdated,
-      GTotal: this.formData.GTotal,
-      Status: this.formData.Status,
-      OrderItems: this.orderItems,
-      DeletedOrderItemIDs: this.DeletedOrderItemIds
-    };
-    
-    for (let i = 0; i < this.orderItems.length; i++) {
-      this.orderItems[i].OrderItemId = i + 1;
-      this.orderItems[i].OrderId = order.OrderId;
+
+    if(this.formData.OrderId == 0)
+    {
+      var order = {
+        DateCreated: this.formData.DateCreated,
+        DateUpdated: null,
+        GTotal: this.formData.GTotal,
+        Status: this.formData.Status,
+        OrderItems: this.orderItems
+      };
+      
+      return this.http.post(`${environment.apiUrl}/order`, order);
+
+    }else
+    {
+      var orderToUpdate = {
+        OrderId: this.formData.OrderId,
+        DateCreated: this.formData.DateCreated,
+        DateUpdated: new Date(),
+        GTotal: this.formData.GTotal,
+        Status: this.formData.Status,
+        OrderItems: this.orderItems,
+        DeletedOrderItemIDs: this.DeletedOrderItemIds
+      };
+      
+      return this.http.put(`${environment.apiUrl}/order`, orderToUpdate);
     }
 
-    return this.http.post(`${environment.apiUrl}/order`, order);
   }
 
   getOrderById(id: string) {
@@ -46,8 +57,8 @@ export class OrderService {
     return this.http.get<Order>(`${environment.apiUrl}/orders`);
   }
 
-  delete(id: number) {
-    this.mock.removeOrder(id);
+  delete(id: string) {
+    return this.http.delete<Order>(`${environment.apiUrl}/orders/${id}`);
   }
 
 }
