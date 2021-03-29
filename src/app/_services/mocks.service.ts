@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Order } from "src/app/_models/customerorder.model";
+import { Order, OrderStatus } from "src/app/_models/customerorder.model";
 import { OrderItem } from "src/app/_models/order-item.model";
 import { Item } from "src/app/_models/item.model";
 
@@ -30,7 +30,7 @@ total:number = 0;
   ];
 
   ordersList: Order[] = [
-   {OrderId:1,DateCreated: new Date('2020,10,10'), DateUpdated:null, GTotal:this.calculateGTotal(1), Status:0, DeletedItemsIDs:""}
+   {OrderId:1,DateCreated: new Date('2020,10,10'), DateUpdated:null, GTotal:this.calculateGTotal(1), Status:OrderStatus.Created, DeletedItemsIDs:""}
   ];
 
   

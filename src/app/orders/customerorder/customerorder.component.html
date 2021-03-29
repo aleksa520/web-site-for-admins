@@ -1,98 +1,104 @@
-    <div style="padding: 50px">
-<form #form="ngForm" autocomplete="off" *ngIf="service.formData" (submit) = "onSubmit(form)">
-  <input type="hidden"  name="OrderId" #OrderId="ngModel" [(ngModel)]="service.formData.OrderId">
-  <div class="row">
+<div style="padding: 50px">
+  <form #form="ngForm" autocomplete="off" *ngIf="service.formData" (submit)="onSubmit(form)">
+    <input type="hidden" name="OrderId" #OrderId="ngModel" [(ngModel)]="service.formData.OrderId">
+    <div class="row">
 
-    <div class="col-5">
-      <label>Date created</label>
-      <div class="form-group"> 
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text">#</div>
-          </div>
-          <div class="form-control">
-            <th>{{service.formData.DateCreated | date:'yyyy-MM-dd'}}</th>
+      <div class="col-5">
+        <label>Date created</label>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+            <div class="form-control">
+              <th>{{service.formData.DateCreated | date:'yyyy-MM-dd'}}</th>
+            </div>
           </div>
         </div>
       </div>
-   </div>
 
-   
-   <div class="col-5">
-    <label>Date updated</label>
-    <div class="form-group"> 
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <div class="input-group-text">#</div>
+
+      <div class="col-5">
+        <label>Date updated</label>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+            <input name="DateUpdated" #DateUpdated="ngModel" [(ngModel)]="service.formData.DateUpdated"
+              class="form-control" readonly>
+          </div>
         </div>
-        <input name="DateUpdated" #DateUpdated="ngModel" [(ngModel)]="service.formData.DateUpdated" class="form-control" readonly>
+      </div>
+
+      <div class="col-5">
+        <div class="form-group">
+          <label>Grand Total</label>
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">$</div>
+            </div>
+            <input name="GTotal" #GTotal="ngModel" [(ngModel)]="service.formData.GTotal" class="form-control" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-5">
+        <div class="form-group">
+          <label>Status</label>
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+            <select>
+              <option value='' disabled selected>Status</option>
+              <option *ngFor="let name of enumKeys" [value]="name"> {{orderStatus[name]}} </option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
- </div>
-
-    <div class="col-5">
-     <div class="form-group">
-        <label>Grand Total</label>
-
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text">$</div>
-          </div>
-          <input name="GTotal" #GTotal="ngModel" [(ngModel)]="service.formData.GTotal" class="form-control" readonly>
-        </div>
-      </div>
+    <!--order items table-->
+    <table class="table table-borderless">
+      <thead class="thead light">
+        <th>Item</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Id</th>
+        <th>
+          <a class="btn btn-sm btn-success text-white" (click)="AddOrEditOrderItem(null,service.formData.OrderId)"><i
+              class="fa fa-plus"></i>Add item</a>
+        </th>
+      </thead>
+      <tbody>
+        <!-- <tr *ngIf="service.orderItems.length==0" [class.text-danger]="!isValid && service.orderItems.length==0"> -->
+        <tr>
+          <td class="font-italic text-center" colspan="5">
+            No item selected for this order.
+          </td>
+        </tr>
+        <tr *ngFor="let item of service.orderItems, let i = index">
+          <td>{{item.ItemId}}</td>
+          <td>{{item.Price}}</td>
+          <td>{{item.Quantity}}</td>
+          <td>{{item.Total}}</td>
+          <td>{{item.ItemId}}</td>
+          <td>
+            <a class="btn btn-sm btn-info text-white" (click)="AddOrEditOrderItem(i,service.formData.OrderId)"><i
+                class="fa fa-pencil"></i>Edit item</a>
+            <a class="btn btn-sm btn-danger text-white ml-1" (click)="onDeleteOrderItem(item.ItemId,i)"><i
+                class="fa fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
+      <a class="btn btn-outline-dark ml-1" routerLink="/orders"><i class="fa fa-table"></i> View Orders</a>
     </div>
 
-    <div class="col-5">
-      <div class="form-group">
-         <label>Status</label>
- 
-         <div class="input-group">
-           <div class="input-group-prepend">
-             <div class="input-group-text">#</div>
-           </div>
-           <input name="Status" #Status="ngModel" [(ngModel)]="service.formData.Status" class="form-control">
-         </div>
-       </div>
-     </div>
-  </div>
- <!--order items table-->
- <table class="table table-borderless">
-   <thead class="thead light">
-     <th>Item</th>
-     <th>Price</th>
-     <th>Quantity</th>
-     <th>Total</th>
-     <th>Id</th>
-     <th>
-
-      <a class="btn btn-sm btn-success text-white"(click)="AddOrEditOrderItem(null,service.formData.OrderId)"><i class="fa fa-plus"></i>Add item</a>
-     </th>
-   </thead>
-   <tbody>
-    <tr *ngIf="service.orderItems.length==0" [class.text-danger]="!isValid && service.orderItems.length==0">
-     
-<td class="font-italic text-center" colspan="5">
-  No item selected for this order.
-</td>
-     </tr>
-<tr *ngFor="let item of service.orderItems, let i = index">
-<td>{{item.ItemId}}</td>
-<td>{{item.Price}}</td>
-<td>{{item.Quantity}}</td>
-<td>{{item.Total}}</td>
-<td>{{item.ItemId}}</td>
-<td>
-  <a class="btn btn-sm btn-info text-white"(click)="AddOrEditOrderItem(i,service.formData.OrderId)"><i class="fa fa-pencil"></i>Edit item</a>
-  <a class="btn btn-sm btn-danger text-white ml-1" (click)="onDeleteOrderItem(item.ItemId,i)"><i class="fa fa-trash"></i></a>
-</td>
-</tr>
-   </tbody>
- </table>
-<div class="form-group">
-<button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
-<a class="btn btn-outline-dark ml-1" routerLink="/orders"><i class="fa fa-table"></i> View Orders</a>
-</div>
-
-</form>
+  </form>
 </div>

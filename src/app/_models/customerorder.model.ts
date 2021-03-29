@@ -7,12 +7,12 @@ export class Order {
     DeletedItemsIDs: string;
 }
 
-enum OrderStatus
+export enum OrderStatus
 {
-  CREATED,
-  PROCESSING,
-  CONFIRMED,
-  UPDATED,
-  SHIPPED,
-  CLOSED
+  Created = "Created",
+  Processing = "Processing",
+  Confirmed = "Confirmed",
+  Updated = "Updated",
+  Shipped = "Shipped",
+  Closed = "Closed"
 }

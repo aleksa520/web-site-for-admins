@@ -10,7 +10,7 @@ import { environment } from '@environments/environment';
 })
 export class OrderService {
 
-  formData: Order;
+  formData;
   orderItems: OrderItem[];
   DeletedOrderItemIds: string;
   RemoveItems: string[];
@@ -29,18 +29,18 @@ export class OrderService {
       OrderItems: this.orderItems,
       DeletedOrderItemIDs: this.DeletedOrderItemIds
     };
+    
     for (let i = 0; i < this.orderItems.length; i++) {
       this.orderItems[i].OrderItemId = i + 1;
       this.orderItems[i].OrderId = order.OrderId;
     }
-  //  this.mock.saveOrder(order as unknown as Order);
-   // this.mock.saveOrderItems(this.orderItems as unknown as OrderItem[]);
-   return this.http.post(`${environment.apiUrl}/order`, order);
+
+    return this.http.post(`${environment.apiUrl}/order`, order);
   }
 
- getOrderById(id:string){
-  return this.http.get<Order>(`${environment.apiUrl}/orders/${id}`);
- }
+  getOrderById(id: string) {
+    return this.http.get<Order>(`${environment.apiUrl}/orders/${id}`);
+  }
 
   getOrdersList() {
     return this.http.get<Order>(`${environment.apiUrl}/orders`);

@@ -7,26 +7,28 @@ import { OrderService } from '@app/_services/customerorder.service';
 import { OrderItemsComponent } from '../order-items/order-items.component';
 import { first } from 'rxjs/operators';
 import { AlertService } from '@app/_services';
-
+import { Order, OrderStatus } from '@app/_models/customerorder.model';
 
 @Component({
   selector: 'app-order',
   templateUrl: './customerorder.component.html',
   styleUrls: []
 })
-
-
 export class OrderComponent implements OnInit {
   isValid: boolean = true;
   submitted = false;
   loading = false;
+  orderStatus = OrderStatus;
+  enumKeys = []
 
   constructor(public service:OrderService,
     public dialog: MatDialog,
     public router: Router,
     public toastr: ToastrService,
     private currentRoute: ActivatedRoute,
-    private alertService: AlertService,) { }
+    private alertService: AlertService) {
+      this.enumKeys=Object.keys(this.orderStatus);
+     }
 
   ngOnInit(): void {
     
@@ -45,8 +47,6 @@ export class OrderComponent implements OnInit {
  
   }
 }
-
-
   resetForm(form?:NgForm){
     if(form=null)
     form.resetForm();
@@ -55,13 +55,11 @@ export class OrderComponent implements OnInit {
       DateCreated: new Date(),
       DateUpdated: null,
       GTotal: 0,
-      Status:0,
+      Status: OrderStatus.Created,
       DeletedItemsIDs:""
     };
     this.service.orderItems = [];
   }
-
-
 
   AddOrEditOrderItem(orderItemIndex, OrderId)
   {
@@ -76,7 +74,6 @@ export class OrderComponent implements OnInit {
           {
             this.updateGrandTotal();
           });
-    
   }
 
   onDeleteOrderItem(orderItemID:number, i: number) {
@@ -125,8 +122,6 @@ export class OrderComponent implements OnInit {
               this.loading = false;
             }
           });
-    }
-    
+    } 
   }
-
 }
