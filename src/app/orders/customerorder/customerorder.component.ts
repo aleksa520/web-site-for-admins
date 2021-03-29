@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { OrderService } from '@app/_services/customerorder.service';
 import { OrderItemsComponent } from '../order-items/order-items.component';
 import { first } from 'rxjs/operators';
+import { AlertService } from '@app/_services';
 
 
 @Component({
@@ -17,12 +18,15 @@ import { first } from 'rxjs/operators';
 
 export class OrderComponent implements OnInit {
   isValid: boolean = true;
+  submitted = false;
+  loading = false;
 
   constructor(public service:OrderService,
     public dialog: MatDialog,
     public router: Router,
     public toastr: ToastrService,
-    private currentRoute: ActivatedRoute) { }
+    private currentRoute: ActivatedRoute,
+    private alertService: AlertService,) { }
 
   ngOnInit(): void {
     
@@ -100,10 +104,27 @@ export class OrderComponent implements OnInit {
     
     if (this.validateForm()) {
       
-      this.service.saveOrder();
-      this.resetForm();
-      this.toastr.success('Submitted Successfully');
-      this.router.navigate(['/orders']);
+      this.submitted = true;
+
+        this.alertService.clear();
+
+        if (form.invalid) {
+          return;
+        }
+
+        this.loading = true;
+        this.service.saveOrder()
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.alertService.success('Orded is added', { keepAfterRouteChange: true });
+              this.router.navigate(['/orders']);
+            },
+            error: error => {
+              this.alertService.error(error);
+              this.loading = false;
+            }
+          });
     }
     
   }

@@ -35,21 +35,21 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getItems();
                 case url.endsWith('/item') && method === 'POST':
                     return addItem();
-                    case url.endsWith('/orderitems') && method === 'GET':
-                        return getOrderItems();
-                    case url.endsWith('/orderitem') && method === 'POST':
-                        return addOrderItem();
-                    case url.endsWith('/orders') && method === 'GET':
-                        return getOrders();
-                    case url.endsWith('/order') && method === 'POST':
-                        return addOrder();
+                case url.endsWith('/orderitems') && method === 'GET':
+                    return getOrderItems();
+                case url.endsWith('/orderitem') && method === 'POST':
+                    return addOrderItem();
+                case url.endsWith('/orders') && method === 'GET':
+                    return getOrders();
+                case url.endsWith('/order') && method === 'POST':
+                    return addOrder();
                 case url.match(/\/item\/\d+$/) && method === 'PUT':
                     return updateItem();
                 case url.match(/\/admins\/\d+$/) && method === 'GET':
                     return getUserById();
                 case url.match(/\/items\/\d+$/) && method === 'GET':
                     return getItemById();
-                    case url.match(/\/orders\/\d+$/) && method === 'GET':
+                case url.match(/\/orders\/\d+$/) && method === 'GET':
                     return getOrderById();
                 case url.match(/\/items\/\d+$/) && method === 'DELETE':
                     return deleteItem();
@@ -141,7 +141,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if (!isLoggedIn()) return unauthorized();
             return ok(orderItems.map(x => basicOrderItemDetails(x)));
         }
-        
+
 
         function getUserById() {
             if (!isLoggedIn()) return unauthorized();
@@ -181,22 +181,22 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function basicOrderDetails(order) {
-            const {OrderId,DateCreated,DateUpdated,GTotal,Status,DeletedItemsIDs} = order;
-            return { OrderId,DateCreated,DateUpdated,GTotal,Status,DeletedItemsIDs};
-            
+            const { OrderId, DateCreated, DateUpdated, GTotal, Status, DeletedItemsIDs } = order;
+            return { OrderId, DateCreated, DateUpdated, GTotal, Status, DeletedItemsIDs };
+
         }
 
         function basicItemDetails(item) {
             const { ItemId, Name, VAT, UnitMeasure, Price } = item;
             return { ItemId, Name, VAT, UnitMeasure, Price };
-            
+
         }
 
         function basicOrderItemDetails(orderItem) {
-            const {OrderItemId, OrderId, ItemId, Quantity, Price, Total } = orderItem;
-            return {OrderItemId, OrderId, ItemId, Quantity, Price, Total  }; 
+            const { OrderItemId, OrderId, ItemId, Quantity, Price, Total } = orderItem;
+            return { OrderItemId, OrderId, ItemId, Quantity, Price, Total };
         }
-        
+
 
         function isLoggedIn() {
             return headers.get('Authorization') === 'Bearer fake-jwt-token';
