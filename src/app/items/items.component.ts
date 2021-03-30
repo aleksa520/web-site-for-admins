@@ -12,6 +12,8 @@ export class ItemsComponent implements OnInit {
 
   itemsList = null;
   term: string;
+  p: Number = 1;
+  count: Number = 2;
     constructor(public itemService:ItemService,
       private router: Router) { }
   

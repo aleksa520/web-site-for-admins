@@ -57,6 +57,7 @@ export class OrderComponent implements OnInit {
       DeletedItemsIDs:""
     };
     this.service.orderItems = [];
+    this.service.hasOrderItems = false;
   }
 
   AddOrEditOrderItem(orderItemIndex, OrderId)

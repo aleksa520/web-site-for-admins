@@ -3,7 +3,8 @@ import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTT
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
 import { Order } from '@app/_models/customerorder.model';
-
+/* This is fake backend service created to simulate the http requests. If you want to add
+your own backend you sholud remove this class. */
 const adminsKey = 'admins';
 let admins = JSON.parse(localStorage.getItem(adminsKey)) || [];
 

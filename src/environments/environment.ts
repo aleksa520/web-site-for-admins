@@ -2,6 +2,9 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+/*
+If you want to specify your own backend servis, you can do that by just replacing the apiUrl
+*/
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:4000'

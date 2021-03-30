@@ -1,3 +1,4 @@
+// Here sholud be mapped all fields from backend domain classes 
 export class Item {
     ItemId: number;
     Name: string;
@@ -12,3 +13,4 @@ export enum UnitMeasure
   KG = "KG",
   G = "G"
 }
+

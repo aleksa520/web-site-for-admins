@@ -20,6 +20,7 @@ import { ItemsComponent } from './items/items.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ItemComponent } from './items/item/item.component';
 import { RouterModule } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
     imports: [
         BrowserModule,
@@ -31,7 +32,8 @@ import { RouterModule } from '@angular/router';
         BrowserAnimationsModule,
         MatDialogModule,
         ToastrModule.forRoot(),
-        Ng2SearchPipeModule
+        Ng2SearchPipeModule,
+        NgxPaginationModule
     ],
     declarations: [
         AppComponent,
