@@ -14,8 +14,8 @@
     <tbody>
         <tr *ngFor="let order of ordersList | filter:term">
          
-            <th (click)="openForEdit(order.OrderId)">{{order.DateCreated | date:'yyyy-MM-dd'}}</th>
-            <th (click)="openForEdit(order.OrderId)">{{order.DateUpdated | date:'yyyy-MM-dd'}} </th>
+            <th (click)="openForEdit(order.OrderId)">{{order.DateCreated | date:'yyyy-MM-dd hh-mm'}}</th>
+            <th (click)="openForEdit(order.OrderId)">{{order.DateUpdated | date:'yyyy-MM-dd hh-mm'}} </th>
             <th (click)="openForEdit(order.OrderId)">{{order.GTotal}}</th>
             <th (click)="openForEdit(order.OrderId)">{{order.Status}}</th>
             <td>

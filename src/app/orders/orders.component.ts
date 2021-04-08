@@ -35,9 +35,10 @@ export class OrdersComponent implements OnInit {
     onOrderDelete(id: number) {
       
       if (confirm('Are you sure you want to delete this order?')) {
-        this.orderService.delete(id);
-         this.refreshList();
-          this.toastr.warning("Order deleted successfully!");
+        this.orderService.delete(id.toString())
+        .pipe(first())
+        .subscribe(() => this.ordersList = this.ordersList.filter(x => x.OrderId !== id));
+     
       }
       
     }

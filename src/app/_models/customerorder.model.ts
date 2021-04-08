@@ -1,3 +1,4 @@
+// Here sholud be mapped all fields from backend domain classes 
 export class Order {
     OrderId: number;
     DateCreated: Date;

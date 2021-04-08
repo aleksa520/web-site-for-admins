@@ -11,7 +11,7 @@
               <div class="input-group-text">#</div>
             </div>
             <div class="form-control">
-              <th>{{service.formData.DateCreated | date:'yyyy-MM-dd'}}</th>
+              <th>{{service.formData.DateCreated | date:'yyyy-MM-dd hh-mm'}}</th>
             </div>
           </div>
         </div>
@@ -25,8 +25,9 @@
             <div class="input-group-prepend">
               <div class="input-group-text">#</div>
             </div>
-            <input name="DateUpdated" #DateUpdated="ngModel" [(ngModel)]="service.formData.DateUpdated"
-              class="form-control" readonly>
+            <div class="form-control">
+              <th>{{service.formData.DateUpdated | date:'yyyy-MM-dd hh-mm'}}</th>
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +53,7 @@
             <div class="input-group-prepend">
               <div class="input-group-text">#</div>
             </div>
-            <select>
+            <select name="Status" #Status="ngModel" [(ngModel)]="service.formData.Status">
               <option value='' disabled selected>Status</option>
               <option *ngFor="let name of enumKeys" [value]="name"> {{orderStatus[name]}} </option>
             </select>
@@ -75,7 +76,7 @@
       </thead>
       <tbody>
         <!-- <tr *ngIf="service.orderItems.length==0" [class.text-danger]="!isValid && service.orderItems.length==0"> -->
-        <tr>
+        <tr *ngIf="service.hasOrderItems==false">
           <td class="font-italic text-center" colspan="5">
             No item selected for this order.
           </td>

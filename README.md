@@ -17,4 +17,4 @@ We use a fake backend, that works by storing admins in a list in local storage.
 
 We use jwt tokens and auth guards.
 
-For products and orders, we created a mock class.
+For products and orders, as well as admins, we created fake backend.

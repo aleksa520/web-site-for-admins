@@ -30,10 +30,13 @@
         <label >Enter unit measure</label>
         <div class="input-group">
             <div class="input-group-prepend">
-              <div class="input-group-text">#</div>
-            </div>
-        <input name="UnitMeasure" #UnitMeasure="ngModel" [(ngModel)]="service.formData.UnitMeasure" class="form-control" [class.is-invalid]="!isValid && service.formData.UnitMeasure.length==0">
-    </div>
+                <div class="input-group-text">#</div>
+              </div>
+            <select style="width: 580px;" name="UnitMeasure" #UnitMeasure="ngModel" [(ngModel)]="service.formData.UnitMeasure">
+                <option value='' disabled selected>Unit measure</option>
+                <option *ngFor="let name of enumKeys" [value]="name"> {{unitMeasure[name]}} </option>
+              </select>
+         </div>
 </div>
 </div>
 <div class="col-md-6">
